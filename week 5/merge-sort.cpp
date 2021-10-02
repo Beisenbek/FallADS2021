@@ -3,48 +3,76 @@
 
 using namespace std;
 
-int main(){
+void merge(int arr[], int l, int m, int r){
+    int i, j, k;
+    int n1 = m - l + 1;
+    int n2 = r - m;
 
-    int n;
-    cin >> n;
-    int a[n];
-    for(int i = 0; i < n; ++i){
-        cin >> a[i];
+    int L[n1], R[n2];
+
+    for(i = 0; i < n1; i++){
+        L[i] = arr[l + i];
+    }
+    for(j = 0; j < n2; j++){
+        R[j] = arr[m + 1 + j];
     }
 
-    int m;
-    cin >> m;
-    int b[m];
-    for(int i = 0; i < m; ++i){
-        cin >> b[i];
-    }
+    i = 0;
+    j = 0;
+    k = l;
 
-    int i = 0;
-    int j = 0;
-
-    while(i < n && j < m){
-        if(a[i] <= b[j]){
-            cout << a[i] << " ";
+    while(i < n1 && j < n2){
+        if(L[i] <= R[j]){
+            arr[k] = L[i];
             i++;
-        }else if(b[j] < a[i]){
-            cout << b[j] << " ";
+        }else{
+            arr[k] = R[j];
             j++;
         }
+        k++;
     }
 
-    if(i < n){
-        for(int k = i; k < n; ++k){
-            cout << a[k] << " ";
-        }
+    while(i < n1){
+        arr[k] = L[i];
+        i++;
+        k++;
     }
 
-    if(j < m){
-        for(int k = j; k < m; ++k){
-            cout << b[k] << " ";
-        }
+    while(j < n2){
+        arr[k] = R[j];
+        j++;
+        k++;
     }
 
+}
 
+void mergeSort(int arr[], int l, int r){
+    if(l < r){
+        int m = l + (r - l) / 2;
+        mergeSort(arr, l, m);
+        mergeSort(arr, m + 1, r);
+        merge(arr, l, m, r);
+    }
+}
+
+
+void printArray(int arr[], int n){
+    for(int i = 0; i < n; ++i){
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+int main(){
+
+    int arr[] = {12, 11, 13, 51, 6, 7};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    printArray(arr, n);
+
+    mergeSort(arr, 0, n - 1);
+
+    printArray(arr, n);
 
     return 0;
 }
